@@ -11,5 +11,12 @@
 
     <artifactId>lpush-common</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.nova.lyn</groupId>
+            <artifactId>lpush-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>

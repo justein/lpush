@@ -14,6 +14,7 @@ public class ServerLauncher {
 
         BootChain chain = BootChain.chain();
         chain.boot()
+                .setNext(new ServerBoot())
                 .setNext(new AdminBoot())
                 .setNext(new MonitorBoot())
                 .setNext(new HttpProxyBoot())

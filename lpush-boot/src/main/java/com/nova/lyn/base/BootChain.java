@@ -3,6 +3,7 @@ package com.nova.lyn.base;
 import com.google.common.eventbus.EventBus;
 import com.nova.lyn.event.ServerStartEvent;
 import com.nova.lyn.event.ServerStopEvent;
+import com.nova.lyn.factory.ServerEventListenerFactory;
 
 /***
  * @ClassName: BootChain
@@ -62,13 +63,13 @@ public class BootChain {
             @Override
             public void start() {
                 System.out.println("LPush Server start success.");
-                new EventBus().post(new ServerStartEvent());
+                ServerEventListenerFactory.create().on(new ServerStartEvent());
             }
 
             @Override
             public void stop() {
                 System.out.println("LPush Server stop success.");
-                new EventBus().post(new ServerStopEvent());
+                ServerEventListenerFactory.create().on(new ServerStopEvent());
             }
 
             @Override
