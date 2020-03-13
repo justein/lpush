@@ -1,5 +1,6 @@
 package com.nova.lyn.service;
 
+import com.nova.lyn.exception.ServiceException;
 import com.nova.lyn.listener.FutureListener;
 import com.nova.lyn.listener.Listener;
 
@@ -32,18 +33,43 @@ public abstract class BaseService implements Service {
 
     }
 
-    protected void doStart(Listener listener) {
+    protected void doStart(Listener listener) throws Throwable {
+        listener.onSuccess();
+    }
+    protected void doStop(Listener listener) throws Throwable {
         listener.onSuccess();
     }
 
-    protected void tryStart(Listener listener, FunctionEx functionEx) {
-        Listener listener1 = wrap(listener);
+    protected void tryStart(Listener l, FunctionEx functionEx) {
+        Listener listener = wrap(l);
         if (started.compareAndSet(false, true)) {
-            init();
-            functionEx.apply(listener1);
-            /**为服务添加监控*/
-            ((FutureListener) listener1).monitor(this);
+            try {
+
+                init();
+                functionEx.apply(listener);
+                /**为服务添加监控*/
+                ((FutureListener) listener).monitor(this);
+            }catch (Throwable throwable){
+                listener.onFailure(throwable);
+                throw new ServiceException(throwable);
+            }
+        }else{
+            if (throwIfStopped()) {
+                listener.onFailure(new ServiceException("service already stopped"));
+            }else {
+                listener.onSuccess();
+            }
         }
+    }
+
+    @Override
+    public boolean syncStart() {
+        return start().join();
+    }
+
+    @Override
+    public boolean syncStop() {
+        return stop().join();
     }
 
     /**服务调用响应超时时间，默认10s*/
@@ -68,17 +94,21 @@ public abstract class BaseService implements Service {
     }
 
     protected interface FunctionEx {
-        void apply(Listener listener);
+        void apply(Listener listener) throws Throwable;
     }
 
     @Override
     public CompletableFuture<Boolean> start() {
-        return null;
+        FutureListener listener = new FutureListener(started);
+        start(listener);
+        return listener;
     }
 
     @Override
     public CompletableFuture<Boolean> stop() {
-        return null;
+        FutureListener listener = new FutureListener(started);
+        stop(listener);
+        return listener;
     }
 
 

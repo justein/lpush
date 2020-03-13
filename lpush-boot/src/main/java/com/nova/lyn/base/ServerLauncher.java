@@ -16,6 +16,8 @@ public class ServerLauncher {
         chain.boot()
                 .setNext(new ServerBoot())
                 .setNext(new AdminBoot())
+                .setNext(new ServiceRegistryBoot())
+                .setNext(new ServiceDiscoveryBoot())
                 .setNext(new MonitorBoot())
                 .setNext(new HttpProxyBoot())
                 .end();
@@ -24,7 +26,7 @@ public class ServerLauncher {
 
         /**模拟提供服务*/
         try {
-            Thread.sleep(2000);
+            Thread.sleep(2000000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

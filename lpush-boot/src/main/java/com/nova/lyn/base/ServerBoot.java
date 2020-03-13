@@ -3,6 +3,7 @@ package com.nova.lyn.base;
 import com.nova.lyn.listener.Listener;
 import com.nova.lyn.server.NettyTCPServer;
 import com.nova.lyn.server.Server;
+import com.nova.lyn.service.ServiceNode;
 
 /***
  * @ClassName: ServerBoot
@@ -12,6 +13,12 @@ import com.nova.lyn.server.Server;
  * @version : V1.0
  */
 public class ServerBoot extends BootService {
+
+    private ServiceNode serviceNode;
+
+    public ServerBoot(ServiceNode serviceNode) {
+        this.serviceNode = serviceNode;
+    }
 
     /**创建TCP Server*/
     private final Server server = new NettyTCPServer(9800);

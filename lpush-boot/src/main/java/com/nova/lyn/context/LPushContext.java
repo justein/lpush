@@ -1,5 +1,7 @@
 package com.nova.lyn.context;
 
+import com.nova.lyn.monitor.Monitor;
+
 /***
  * @ClassName: LPushContext
  * @Description: TODO
@@ -10,6 +12,7 @@ package com.nova.lyn.context;
 
 public interface LPushContext {
 
+    Monitor getMonitor();
 
 
 }

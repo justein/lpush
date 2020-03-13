@@ -22,7 +22,10 @@ public interface Service {
     CompletableFuture<Boolean> start();
 
     CompletableFuture<Boolean> stop();
-
+    /**同步启动*/
+    boolean syncStart();
+    /**同步关闭*/
+    boolean syncStop();
     /**服务初始化*/
     void init();
     /**服务运行状态*/
